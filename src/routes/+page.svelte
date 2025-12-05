@@ -1,15 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import type { Item } from '$lib/front/type';
   export let data: { connection: boolean}; // Received from load function - Get database connection status
-  let items = [{ id: 1, name: 'Sample Item' }];
+  let items : Item[] = [];
 
 // GET items via fetch
 const loadItems = async () => {
   const res = await fetch('/api/items');
-  items = await res.json();
+  items = await res.json() as Item[];
 };
-onMount(() => {
-  loadItems();
+onMount(async () => {
+  await loadItems();
   console.info("Page mounted, items loaded:", items);
 });
 </script>
