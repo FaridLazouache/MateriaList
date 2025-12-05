@@ -6,4 +6,13 @@
   "editor.defaultFormatter": "prettier.prettier-vscode",
   "editor.formatOnType": false,
   "files.eol": "\n",
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[svelte]": {
+    "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
+  },
 }

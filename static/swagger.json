@@ -1,0 +1,631 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "MateriaList API",
+    "version": "1.0.0",
+    "description": "CRUD API for Items, Universes, Manufacturers, Pictures and Universe-Item relations"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5173",
+      "description": "Local SvelteKit Dev Server"
+    }
+  ],
+  "paths": {
+    "/api/items": {
+      "get": {
+        "summary": "Get all items",
+        "tags": ["Item"],
+        "responses": {
+          "200": {
+            "description": "List of all items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Item" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new item",
+        "tags": ["Item"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ItemCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created item",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Item" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/items/{id}": {
+      "get": {
+        "summary": "Get one item",
+        "tags": ["Item"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Item found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Item" }
+              }
+            }
+          },
+          "404": { "description": "Item not found" }
+        }
+      },
+      "put": {
+        "summary": "Update an item",
+        "tags": ["Item"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ItemUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated item",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Item" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete an item",
+        "tags": ["Item"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": { "204": { "description": "Item deleted" } }
+      }
+    },
+
+    "/api/universes": {
+      "get": {
+        "summary": "Get all universes",
+        "tags": ["Universe"],
+        "responses": {
+          "200": {
+            "description": "List of universes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Universe" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a universe",
+        "tags": ["Universe"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UniverseCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created universe",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Universe" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/universes/{id}": {
+      "get": {
+        "summary": "Get universe by id",
+        "tags": ["Universe"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Universe found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Universe" }
+              }
+            }
+          },
+          "404": { "description": "Not found" }
+        }
+      },
+      "put": {
+        "summary": "Update a universe",
+        "tags": ["Universe"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UniverseUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated universe",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Universe" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete universe",
+        "tags": ["Universe"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": { "204": { "description": "Deleted" } }
+      }
+    },
+
+    "/api/manufacturers": {
+      "get": {
+        "tags": ["Manufacturer"],
+        "summary": "Get all manufacturers",
+        "responses": {
+          "200": {
+            "description": "List of manufacturers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Manufacturer" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Manufacturer"],
+        "summary": "Create a manufacturer",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ManufacturerCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Manufacturer" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/manufacturers/{id}": {
+      "get": {
+        "tags": ["Manufacturer"],
+        "summary": "Get manufacturer",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Manufacturer" }
+              }
+            }
+          },
+          "404": { "description": "Not found" }
+        }
+      },
+      "put": {
+        "tags": ["Manufacturer"],
+        "summary": "Update manufacturer",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ManufacturerUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Manufacturer" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Manufacturer"],
+        "summary": "Delete manufacturer",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": { "204": { "description": "Deleted" } }
+      }
+    },
+
+    "/api/pictures": {
+      "get": {
+        "tags": ["Picture"],
+        "summary": "Get all pictures",
+        "responses": {
+          "200": {
+            "description": "List of pictures",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Picture" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Picture"],
+        "summary": "Create picture",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PictureCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Picture" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/pictures/{id}": {
+      "get": {
+        "tags": ["Picture"],
+        "summary": "Get picture",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Found",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Picture" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Picture"],
+        "summary": "Update picture",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PictureUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Picture" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Picture"],
+        "summary": "Delete picture",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": { "204": { "description": "Deleted" } }
+      }
+    },
+
+    "/api/universe-items": {
+      "get": {
+        "tags": ["UniverseItem"],
+        "summary": "Get all universe-item links",
+        "responses": {
+          "200": {
+            "description": "List of relations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/UniverseItem" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["UniverseItem"],
+        "summary": "Create a universe → item link",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UniverseItemCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UniverseItem" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/universe-items/{id}": {
+      "delete": {
+        "tags": ["UniverseItem"],
+        "summary": "Delete a universe-item relation",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": { "204": { "description": "Deleted" } }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "Item": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "manufacturer_id": { "type": "integer", "nullable": true },
+          "picture_id": { "type": "integer", "nullable": true }
+        }
+      },
+      "ItemCreate": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "manufacturer_id": { "type": "integer", "nullable": true },
+          "picture_id": { "type": "integer", "nullable": true }
+        }
+      },
+      "ItemUpdate": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "manufacturer_id": { "type": "integer" },
+          "picture_id": { "type": "integer" }
+        }
+      },
+
+      "Universe": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "color": { "type": "string" }
+        }
+      },
+      "UniverseCreate": {
+        "type": "object",
+        "required": ["name", "color"],
+        "properties": {
+          "name": { "type": "string" },
+          "color": { "type": "string" }
+        }
+      },
+      "UniverseUpdate": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "color": { "type": "string" }
+        }
+      },
+
+      "Manufacturer": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" }
+        }
+      },
+      "ManufacturerCreate": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+      "ManufacturerUpdate": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" }
+        }
+      },
+
+      "Picture": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "title": { "type": "string" },
+          "path": { "type": "string" },
+          "main": { "type": "boolean" }
+        }
+      },
+      "PictureCreate": {
+        "type": "object",
+        "required": ["title", "path"],
+        "properties": {
+          "title": { "type": "string" },
+          "path": { "type": "string" },
+          "main": { "type": "boolean" }
+        }
+      },
+      "PictureUpdate": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "path": { "type": "string" },
+          "main": { "type": "boolean" }
+        }
+      },
+
+      "UniverseItem": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "item_id": { "type": "integer" },
+          "universe_id": { "type": "integer" }
+        }
+      },
+      "UniverseItemCreate": {
+        "type": "object",
+        "required": ["item_id", "universe_id"],
+        "properties": {
+          "item_id": { "type": "integer" },
+          "universe_id": { "type": "integer" }
+        }
+      }
+    }
+  }
+}
