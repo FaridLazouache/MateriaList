@@ -1,5 +1,5 @@
 import type { RequestHandler } from './$types';
-import { addItem, getItems } from '$lib/server/crud';
+import { addItem, getItems } from '$lib/server/query';
 
 export const GET: RequestHandler = async () => {
   const items = await getItems();

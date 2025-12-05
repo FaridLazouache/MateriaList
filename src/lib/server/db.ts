@@ -7,12 +7,10 @@ import {
 } from "$env/static/private";
 import postgres from "postgres";
 
+const encodedPassword = encodeURIComponent(POSTGRES_PASSWORD).toString();
 
-let url: URL = new URL("postgresql://user:password@localhost:5432/database");
+export const url = `postgresql://${POSTGRES_USER}:${encodedPassword}@${POSTGRES_URL}:${POSTGRES_PORT}/${POSTGRES_DATABASE}`;
 
-  url = new URL(
-    `postgresql://${POSTGRES_USER}:${encodeURIComponent(POSTGRES_PASSWORD)}@${POSTGRES_URL}:${POSTGRES_PORT}/${POSTGRES_DATABASE}`);
+console.debug(`Postgres connection URL: ${url}`);
 
-export const sql = postgres(url.toString(), { ssl: false});
-
-
+export const sql = postgres(url, { ssl: false });

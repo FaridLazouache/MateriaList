@@ -1,4 +1,3 @@
-import { connect } from 'http2';
 import type { PageServerLoad } from './$types';
 import { connectionTest } from '$lib/server/query';
 
