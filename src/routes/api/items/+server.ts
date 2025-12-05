@@ -1,5 +1,5 @@
-import type { RequestHandler } from './$types';
-import { addItem, getItems } from '$lib/server/query';
+import type { RequestHandler } from "./$types";
+import { addItem, getItems } from "$lib/server/query";
 
 export const GET: RequestHandler = async () => {
   const items = await getItems();
@@ -7,7 +7,7 @@ export const GET: RequestHandler = async () => {
 };
 
 export const POST: RequestHandler = async ({ request }) => {
-  const { name } = await request.json();
-  const newItem = await addItem(name);
+  const { name, manufacturer_id, picture_id } = await request.json();
+  const newItem = await addItem(name, manufacturer_id, picture_id);
   return new Response(JSON.stringify(newItem), { status: 201 });
 };
