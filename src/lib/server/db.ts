@@ -1,16 +1,22 @@
-import {
-  POSTGRES_URL,
-  POSTGRES_PORT,
-  POSTGRES_USER,
-  POSTGRES_PASSWORD,
-  POSTGRES_DATABASE,
-} from "$env/static/private";
-import postgres from "postgres";
+import Database from "better-sqlite3";
+import path from "path";
+import { initDb, testDB } from "./init-db";
+import { existsSync, statSync } from "fs";
 
-const encodedPassword = encodeURIComponent(POSTGRES_PASSWORD).toString();
+// path to the SQLite database file
+const dbPath = path.resolve("src/database/db.sqlite");
 
-export const url = `postgresql://${POSTGRES_USER}:${encodedPassword}@${POSTGRES_URL}:${POSTGRES_PORT}/${POSTGRES_DATABASE}`;
+export const db = new Database(dbPath, {
+  verbose: console.debug,
+});
 
-console.debug(`Postgres connection URL: ${url}`);
+db.pragma("foreign_keys = ON");
 
-export const sql = postgres(url, { ssl: false });
+// Initialize database schema and seed it with test data (delete in production) if the database file is empty
+if (existsSync(dbPath) && statSync(dbPath).size === 0) {
+  console.debug("Database file is empty, initializing schema...");
+  initDb();
+  testDB();
+}
+
+console.info("SQLite database connected at", dbPath);

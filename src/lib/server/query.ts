@@ -1,198 +1,212 @@
-import { sql } from "./db";
+import { db } from "./db";
 
-/* ------------------------- ITEM ------------------------- */
-export async function getItems() {
-  return sql`SELECT * FROM item ORDER BY id`;
+/* ========================= ITEM ========================= */
+
+export function getItems() {
+  return db.prepare(`SELECT * FROM item ORDER BY id`).all();
 }
 
-export async function getItem(id: number) {
-  const [item] = await sql`SELECT * FROM item WHERE id = ${id}`;
-  return item;
+export function getItem(id: number) {
+  return db.prepare(`SELECT * FROM item WHERE id = ?`).get(id);
 }
 
-export async function addItem(
+export function addItem(
   name: string,
   manufacturer_id: number | null,
   picture_id: number | null
 ) {
-  const [newItem] = await sql`
-      INSERT INTO item (name, manufacturer_id, picture_id)
-      VALUES (${name}, ${manufacturer_id}, ${picture_id})
-      RETURNING *;
-    `;
-  return newItem;
+  const res = db
+    .prepare(
+      `
+    INSERT INTO item (name, manufacturer_id, picture_id)
+    VALUES (?, ?, ?)
+  `
+    )
+    .run(name, manufacturer_id, picture_id);
+
+  return getItem(Number(res.lastInsertRowid));
 }
 
-export async function updateItem(
+export function updateItem(
   id: number,
-  data: {
-    name?: string;
-    manufacturer_id?: number;
-    picture_id?: number;
-  }
+  data: { name?: string; manufacturer_id?: number; picture_id?: number }
 ) {
-  const [updated] = await sql`
+  db.prepare(
+    `
     UPDATE item SET
-      name = COALESCE(${data.name}, name),
-      manufacturer_id = COALESCE(${data.manufacturer_id}, manufacturer_id),
-      picture_id = COALESCE(${data.picture_id}, picture_id)
-    WHERE id = ${id}
-    RETURNING *;
-  `;
-  return updated;
+      name = COALESCE(?, name),
+      manufacturer_id = COALESCE(?, manufacturer_id),
+      picture_id = COALESCE(?, picture_id)
+    WHERE id = ?
+  `
+  ).run(data.name, data.manufacturer_id, data.picture_id, id);
+
+  return getItem(id);
 }
 
-export async function deleteItem(id: number) {
-  await sql`DELETE FROM item WHERE id = ${id}`;
+export function deleteItem(id: number) {
+  db.prepare(`DELETE FROM item WHERE id = ?`).run(id);
   return true;
 }
 
-/* ------------------------- UNIVERSE ------------------------- */
+/* ========================= UNIVERSE ========================= */
 
-export async function getUniverses() {
-  return sql`SELECT * FROM universe ORDER BY id`;
+export function getUniverses() {
+  return db.prepare(`SELECT * FROM universe ORDER BY id`).all();
 }
 
-export async function getUniverse(id: number) {
-  const [universe] = await sql`SELECT * FROM universe WHERE id = ${id}`;
-  return universe;
+export function getUniverse(id: number) {
+  return db.prepare(`SELECT * FROM universe WHERE id = ?`).get(id);
 }
 
-export async function addUniverse(name: string, color: string) {
-  const [newUniverse] = await sql`
-      INSERT INTO universe (name, color)
-      VALUES (${name}, ${color})
-      RETURNING *;
-    `;
-  return newUniverse;
+export function addUniverse(name: string, color: string) {
+  const res = db
+    .prepare(
+      `
+    INSERT INTO universe (name, color)
+    VALUES (?, ?)
+  `
+    )
+    .run(name, color);
+
+  return getUniverse(Number(res.lastInsertRowid));
 }
 
-export async function updateUniverse(
+export function updateUniverse(
   id: number,
   data: { name?: string; color?: string }
 ) {
-  const [updated] = await sql`
+  db.prepare(
+    `
     UPDATE universe SET
-      name = COALESCE(${data.name}, name),
-      color = COALESCE(${data.color}, color)
-    WHERE id = ${id}
-    RETURNING *;
-  `;
-  return updated;
+      name = COALESCE(?, name),
+      color = COALESCE(?, color)
+    WHERE id = ?
+  `
+  ).run(data.name, data.color, id);
+
+  return getUniverse(id);
 }
 
-export async function deleteUniverse(id: number) {
-  await sql`DELETE FROM universe WHERE id = ${id}`;
+export function deleteUniverse(id: number) {
+  db.prepare(`DELETE FROM universe WHERE id = ?`).run(id);
   return true;
 }
 
-/* ------------------------- MANUFACTURER ------------------------- */
+/* ========================= MANUFACTURER ========================= */
 
-export async function getManufacturers() {
-  return sql`SELECT * FROM manufacturer ORDER BY id`;
+export function getManufacturers() {
+  return db.prepare(`SELECT * FROM manufacturer ORDER BY id`).all();
 }
 
-export async function getManufacturer(id: number) {
-  const [man] = await sql`SELECT * FROM manufacturer WHERE id = ${id}`;
-  return man;
+export function getManufacturer(id: number) {
+  return db.prepare(`SELECT * FROM manufacturer WHERE id = ?`).get(id);
 }
 
-export async function addManufacturer(name: string) {
-  const [newMan] = await sql`
-      INSERT INTO manufacturer (name)
-      VALUES (${name})
-      RETURNING *;
-    `;
-  return newMan;
+export function addManufacturer(name: string) {
+  const res = db
+    .prepare(
+      `
+    INSERT INTO manufacturer (name)
+    VALUES (?)
+  `
+    )
+    .run(name);
+
+  return getManufacturer(Number(res.lastInsertRowid));
 }
 
-export async function updateManufacturer(id: number, data: { name?: string }) {
-  const [updated] = await sql`
+export function updateManufacturer(id: number, data: { name?: string }) {
+  db.prepare(
+    `
     UPDATE manufacturer SET
-      name = COALESCE(${data.name}, name)
-    WHERE id = ${id}
-    RETURNING *;
-  `;
-  return updated;
+      name = COALESCE(?, name)
+    WHERE id = ?
+  `
+  ).run(data.name, id);
+
+  return getManufacturer(id);
 }
 
-export async function deleteManufacturer(id: number) {
-  await sql`DELETE FROM manufacturer WHERE id = ${id}`;
+export function deleteManufacturer(id: number) {
+  db.prepare(`DELETE FROM manufacturer WHERE id = ?`).run(id);
   return true;
 }
 
-/* ------------------------- PICTURE ------------------------- */
+/* ========================= PICTURES ========================= */
 
-export async function getPictures() {
-  return sql`SELECT * FROM picture ORDER BY id`;
+export function getPictures() {
+  return db.prepare(`SELECT * FROM pictures ORDER BY id`).all();
 }
 
-export async function getPicture(id: number) {
-  const [pic] = await sql`SELECT * FROM picture WHERE id = ${id}`;
-  return pic;
+export function getPicture(id: number) {
+  return db.prepare(`SELECT * FROM pictures WHERE id = ?`).get(id);
 }
 
-export async function addPicture(
-  title: string,
-  path: string,
-  main: boolean | null
-) {
-  const [newPic] = await sql`
-      INSERT INTO picture (title, path, main)
-      VALUES (${title}, ${path}, ${main})
-      RETURNING *;
-    `;
-  return newPic;
+export function addPicture(title: string, path: string, main: boolean | null) {
+  const res = db
+    .prepare(
+      `
+    INSERT INTO pictures (title, path, main)
+    VALUES (?, ?, ?)
+  `
+    )
+    .run(title, path, main ? 1 : 0);
+
+  return getPicture(Number(res.lastInsertRowid));
 }
 
-export async function updatePicture(
+export function updatePicture(
   id: number,
   data: { title?: string; path?: string; main?: boolean }
 ) {
-  const [updated] = await sql`
-    UPDATE picture SET
-      title = COALESCE(${data.title}, title),
-      path = COALESCE(${data.path}, path),
-      main = COALESCE(${data.main}, main)
-    WHERE id = ${id}
-    RETURNING *;
-  `;
-  return updated;
+  db.prepare(
+    `
+    UPDATE pictures SET
+      title = COALESCE(?, title),
+      path = COALESCE(?, path),
+      main = COALESCE(?, main)
+    WHERE id = ?
+  `
+  ).run(data.title, data.path, data.main ? 1 : null, id);
+
+  return getPicture(id);
 }
 
-export async function deletePicture(id: number) {
-  await sql`DELETE FROM picture WHERE id = ${id}`;
+export function deletePicture(id: number) {
+  db.prepare(`DELETE FROM pictures WHERE id = ?`).run(id);
   return true;
 }
 
-/* ------------------------- UNIVERSE_ITEM (pivot) ------------------------- */
+/* ========================= UNIVERSE_ITEM ========================= */
 
-export async function getUniverseItems() {
-  return sql`SELECT * FROM universe_item ORDER BY id`;
+export function getUniverseItems() {
+  return db.prepare(`SELECT * FROM universe_item ORDER BY id`).all();
 }
 
-export async function getUniverseItem(id: number) {
-  const [row] = await sql`SELECT * FROM universe_item WHERE id = ${id}`;
-  return row;
+export function addUniverseItem(item_id: number, universe_id: number) {
+  const res = db
+    .prepare(
+      `
+    INSERT INTO universe_item (item_id, universe_id)
+    VALUES (?, ?)
+  `
+    )
+    .run(item_id, universe_id);
+
+  return db
+    .prepare(`SELECT * FROM universe_item WHERE id = ?`)
+    .get(Number(res.lastInsertRowid));
 }
 
-export async function addUniverseItem(item_id: number, universe_id: number) {
-  const [newRow] = await sql`
-      INSERT INTO universe_item (item_id, universe_id)
-      VALUES (${item_id}, ${universe_id})
-      RETURNING *;
-    `;
-  return newRow;
-}
-
-export async function deleteUniverseItem(id: number) {
-  await sql`DELETE FROM universe_item WHERE id = ${id}`;
+export function deleteUniverseItem(id: number) {
+  db.prepare(`DELETE FROM universe_item WHERE id = ?`).run(id);
   return true;
 }
 
-/* ------------------------- CONNECTION TEST ------------------------- */
+/* ========================= CONNECTION TEST ========================= */
 
-export async function connectionTest() {
-  const res = await sql`SELECT current_database() AS db_name;`;
-  return res[0].db_name === process.env.POSTGRES_DATABASE;
+export function connectionTest() {
+  const res = db.prepare(`SELECT 1 AS ok`).get();
+  return res.ok === 1;
 }
