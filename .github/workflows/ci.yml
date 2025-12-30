@@ -23,4 +23,4 @@ jobs:
       run: |
         npm ci --no-fund --no-audit
         npm run build
-        npx webpack
+    
