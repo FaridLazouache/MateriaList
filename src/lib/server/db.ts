@@ -1,16 +1,19 @@
-import {
-  POSTGRES_URL,
-  POSTGRES_PORT,
-  POSTGRES_USER,
-  POSTGRES_PASSWORD,
-  POSTGRES_DATABASE,
-} from "$env/static/private";
-import postgres from "postgres";
+import Database from "better-sqlite3";
+import path from "path";
+import { initDb, testDB } from "./init-db";
 
-const encodedPassword = encodeURIComponent(POSTGRES_PASSWORD).toString();
+// chemin vers la DB
+const dbPath = path.resolve("src/database/db.sqlite");
 
-export const url = `postgresql://${POSTGRES_USER}:${encodedPassword}@${POSTGRES_URL}:${POSTGRES_PORT}/${POSTGRES_DATABASE}`;
+// connexion SYNC (normal avec SQLite)
+export const db = new Database(dbPath, {
+  verbose: console.log, // enlève si trop bruyant
+});
 
-console.debug(`Postgres connection URL: ${url}`);
+db.pragma("foreign_keys = ON");
 
-export const sql = postgres(url, { ssl: false });
+// Init automatique
+initDb();
+testDB();
+
+console.info("SQLite database connected at", dbPath);
