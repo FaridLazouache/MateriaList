@@ -24,5 +24,6 @@ jobs:
 
     - name: Build
       run: |
+        npm ci --no-fund --no-audit
         npm install
         npx webpack
