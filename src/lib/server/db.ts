@@ -1,19 +1,22 @@
 import Database from "better-sqlite3";
 import path from "path";
 import { initDb, testDB } from "./init-db";
+import { existsSync, statSync } from "fs";
 
-// chemin vers la DB
+// path to the SQLite database file
 const dbPath = path.resolve("src/database/db.sqlite");
 
-// connexion SYNC (normal avec SQLite)
 export const db = new Database(dbPath, {
-  verbose: console.log, // enlève si trop bruyant
+  verbose: console.debug,
 });
 
 db.pragma("foreign_keys = ON");
 
-// Init automatique
-initDb();
-testDB();
+// Initialize database schema and seed it with test data (delete in production) if the database file is empty
+if (existsSync(dbPath) && statSync(dbPath).size === 0) {
+  console.debug("Database file is empty, initializing schema...");
+  initDb();
+  testDB();
+}
 
 console.info("SQLite database connected at", dbPath);
