@@ -31,4 +31,39 @@ jobs:
         npm ci --no-fund --no-audit --include=dev
         npx svelte-kit sync
         npm run build
+  tests:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: "npm"
+
+    - name: Install dependencies
+      run: |
+        npm ci --no-fund --no-audit --include=dev
+
+    - name: Run tests
+      env:
+        NODE_ENV: test
+        DATABASE_FOLDER: ${{ vars.DATABASE_FOLDER }}
+        DATABASE_FILE: ${{ vars.DATABASE_FILE }}
+        LOG_LEVEL: ${{ vars.LOG_LEVEL }}
+      run: |
+        npx svelte-kit sync
+        npm run test
+    - name: test coverage
+      env:
+        NODE_ENV: test
+        DATABASE_FOLDER: ${{ vars.DATABASE_FOLDER }}
+        DATABASE_FILE: ${{ vars.DATABASE_FILE }}
+        LOG_LEVEL: ${{ vars.LOG_LEVEL }}
+      run: |
+        npx svelte-kit sync
+        npm run coverage
     
