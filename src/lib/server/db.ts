@@ -13,13 +13,9 @@ export function getDatabase(): {
   db: BetterSQLite3.Database;
   dbPath: string;
 } {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = path.dirname(__filename);
+  const __dirname = process.cwd();
 
-  const dataDir = path.resolve(
-    __dirname,
-    `../../../src/${env.DATABASE_FOLDER}`
-  );
+  const dataDir = path.resolve(__dirname, `${env.DATABASE_FOLDER}`);
   const dbPath = path.join(dataDir, env.DATABASE_FILE || "undefined");
   console.debug("Database path:", dbPath);
   if (dbPath.includes("undefined")) {

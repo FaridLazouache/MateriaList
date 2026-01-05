@@ -20,8 +20,8 @@ describe("Database", () => {
   });
   afterEach(async () => {
     console.log("Cleaning up test database...");
-    console.log(`Removing src/${env.DATABASE_FOLDER}...`);
-    rmSync(`src/${env.DATABASE_FOLDER}`, {
+    console.log(`Removing ${env.DATABASE_FOLDER}...`);
+    rmSync(`${env.DATABASE_FOLDER}`, {
       recursive: true,
       force: true,
     });
@@ -93,12 +93,12 @@ describe("Database", () => {
 
   it("should create database directory if it does not exist", () => {
     env.DATABASE_FOLDER = "non_existent_directory/database_test";
-    expect(fs.existsSync(`src/${env.DATABASE_FOLDER}`)).toBe(false);
+    expect(fs.existsSync(`${env.DATABASE_FOLDER}`)).toBe(false);
     const { db, dbPath } = getDatabase();
     startDatabase(db, dbPath);
     expect(db.open).toBe(true);
     expect(dbPath).toContain("non_existent_directory/database_test");
-    expect(fs.existsSync(`src/${env.DATABASE_FOLDER}`)).toBe(true);
+    expect(fs.existsSync(`${env.DATABASE_FOLDER}`)).toBe(true);
   });
 
   it("should throw error if init.sql file is missing", () => {
