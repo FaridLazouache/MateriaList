@@ -17,3 +17,5 @@ vite.config.ts.timestamp-*
 src/database/db.sqlite
 coverage
 **/*.sveltekit**
+.vercel/**
+**.db
