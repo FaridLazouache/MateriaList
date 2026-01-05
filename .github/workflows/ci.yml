@@ -4,7 +4,6 @@ env:
   DATABASE_FOLDER: ${{ vars.DATABASE_FOLDER }}
   DATABASE_FILE: ${{ vars.DATABASE_FILE }}
   LOG_LEVEL: ${{ vars.LOG_LEVEL }}
-  NODE_ENV: ${{ vars.NODE_ENV }}
 
 on:
   push:
@@ -26,6 +25,8 @@ jobs:
         cache: "npm"
 
     - name: Build
+      env:
+        NODE_ENV: ${{ vars.NODE_ENV }}
       run: |
         npm ci --no-fund --no-audit
         npm run build
