@@ -5,6 +5,7 @@ import path from "path";
 import { existsSync, statSync, mkdirSync } from "fs";
 import { fileURLToPath } from "url";
 import { initDb, testDB } from "./init-db";
+import { env } from "$env/dynamic/private";
 
 let isNew: boolean = false;
 
@@ -17,9 +18,9 @@ export function getDatabase(): {
 
   const dataDir = path.resolve(
     __dirname,
-    `../../../src/${process.env.DATABASE_FOLDER}`
+    `../../../src/${env.DATABASE_FOLDER}`
   );
-  const dbPath = path.join(dataDir, process.env.DATABASE_FILE || "undefined");
+  const dbPath = path.join(dataDir, env.DATABASE_FILE || "undefined");
   console.debug("Database path:", dbPath);
   if (dbPath.includes("undefined")) {
     throw new Error("DATABASE_FILE environment variable is not set");
@@ -33,7 +34,7 @@ export function getDatabase(): {
   }
   return {
     db: new Database(dbPath, {
-      verbose: process.env.NODE_ENV !== "test" ? console.debug : undefined,
+      verbose: env.NODE_ENV !== "test" ? console.debug : undefined,
     }),
     dbPath,
   };
@@ -48,8 +49,8 @@ export function startDatabase(db: BetterSQLite3.Database, dbPath: string) {
   }
 
   if (
-    (process.env.NODE_ENV == "test" && isNew) ||
-    (process.env.NODE_ENV == "development" && isNew)
+    (env.NODE_ENV == "test" && isNew) ||
+    (env.NODE_ENV == "development" && isNew)
   ) {
     console.info("Seeding database with test data...");
     testDB(db);

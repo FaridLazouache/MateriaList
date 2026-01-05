@@ -1,19 +1,27 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import process from "process";
-import { getDatabase, startDatabase } from "../db";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import fs, { rmSync } from "fs";
+import { env } from "$env/dynamic/private";
+
+vi.mock("$env/dynamic/private", () => ({
+  env: {
+    DATABASE_FOLDER: "test-data",
+    DATABASE_FILE: "test.db",
+    NODE_ENV: "test",
+  },
+}));
+import { getDatabase, startDatabase } from "../db";
 
 describe("Database", () => {
   beforeEach(() => {
     //* Restore environment variables for testing */
-    process.env.DATABASE_FOLDER = "database_test";
-    process.env.DATABASE_FILE = "materialist_test.sqlite";
-    process.env.NODE_ENV = "test";
+    env.DATABASE_FOLDER = "database_test";
+    env.DATABASE_FILE = "materialist_test.sqlite";
+    env.NODE_ENV = "test";
   });
   afterEach(async () => {
     console.log("Cleaning up test database...");
-    console.log(`Removing src/${process.env.DATABASE_FOLDER}...`);
-    rmSync(`src/${process.env.DATABASE_FOLDER}`, {
+    console.log(`Removing src/${env.DATABASE_FOLDER}...`);
+    rmSync(`src/${env.DATABASE_FOLDER}`, {
       recursive: true,
       force: true,
     });
@@ -33,14 +41,14 @@ describe("Database", () => {
   });
 
   it("should throw error if DATABASE_FILE is not set", () => {
-    process.env.DATABASE_FILE = "";
+    env.DATABASE_FILE = "";
     expect(() => getDatabase()).toThrow(
       "DATABASE_FILE environment variable is not set"
     );
   });
 
   it("should not seed database if not in test or development mode", () => {
-    process.env.NODE_ENV = "production";
+    env.NODE_ENV = "production";
     const { db, dbPath } = getDatabase();
     startDatabase(db, dbPath);
     const row: any = db.prepare(`SELECT * FROM item ORDER BY id`).all()[0];
@@ -48,7 +56,7 @@ describe("Database", () => {
   });
 
   it("should seed database in development mode", () => {
-    process.env.NODE_ENV = "development";
+    env.NODE_ENV = "development";
     const { db, dbPath } = getDatabase();
     startDatabase(db, dbPath);
     const row: any = db.prepare(`SELECT * FROM item ORDER BY id`).all()[0];
@@ -56,7 +64,7 @@ describe("Database", () => {
   });
 
   it("should seed database in test mode", () => {
-    process.env.NODE_ENV = "test";
+    env.NODE_ENV = "test";
     const { db, dbPath } = getDatabase();
     startDatabase(db, dbPath);
     const row: any = db.prepare(`SELECT * FROM item ORDER BY id`).all()[0];
@@ -84,13 +92,13 @@ describe("Database", () => {
   });
 
   it("should create database directory if it does not exist", () => {
-    process.env.DATABASE_FOLDER = "non_existent_directory/database_test";
-    expect(fs.existsSync(`src/${process.env.DATABASE_FOLDER}`)).toBe(false);
+    env.DATABASE_FOLDER = "non_existent_directory/database_test";
+    expect(fs.existsSync(`src/${env.DATABASE_FOLDER}`)).toBe(false);
     const { db, dbPath } = getDatabase();
     startDatabase(db, dbPath);
     expect(db.open).toBe(true);
     expect(dbPath).toContain("non_existent_directory/database_test");
-    expect(fs.existsSync(`src/${process.env.DATABASE_FOLDER}`)).toBe(true);
+    expect(fs.existsSync(`src/${env.DATABASE_FOLDER}`)).toBe(true);
   });
 
   it("should throw error if init.sql file is missing", () => {

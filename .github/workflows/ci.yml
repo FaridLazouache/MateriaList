@@ -29,5 +29,6 @@ jobs:
         NODE_ENV: ${{ vars.NODE_ENV }}
       run: |
         npm ci --no-fund --no-audit
+        npx svelte-kit sync
         npm run build
     
