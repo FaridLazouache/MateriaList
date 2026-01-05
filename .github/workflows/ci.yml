@@ -1,5 +1,11 @@
 name: MateriaList CI
 
+env:
+  DATABASE_FOLDER: {{vars.DATABASE_FOLDER}}
+  DATABASE_FILE: {{vars.DATABASE_FILE}}
+  LOG_LEVEL: {{vars.LOG_LEVEL}}
+  NODE_ENV: {{vars.NODE_ENV}}
+
 on:
   push:
     branches: [ "develop" ]
