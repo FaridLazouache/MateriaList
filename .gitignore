@@ -19,3 +19,4 @@ coverage
 **/*.sveltekit**
 .vercel/**
 **.db
+**.sqlite

@@ -1,4 +1,3 @@
-// src/lib/server/db.ts
 import Database from "better-sqlite3";
 import type BetterSQLite3 from "better-sqlite3";
 import path from "path";
