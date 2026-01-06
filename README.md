@@ -1,10 +1,10 @@
 
 # MateriaList
 
-![Coverage: Statements](./badges/statements.svg)
-![Coverage: Branches](./badges/branches.svg)
-![Coverage: Functions](./badges/functions.svg)
-![Coverage: Lines](./badges/lines.svg)
+![Coverage: Statements](https://raw.githubusercontent.com/FaridLazouache/MateriaList/coverage/badges/statements.svg)
+![Coverage: Branches](https://raw.githubusercontent.com/FaridLazouache/MateriaList/coverage/badges/branches.svg)
+![Coverage: Functions](https://raw.githubusercontent.com/FaridLazouache/MateriaList/coverage/badges/functions.svg)
+![Coverage: Lines](https://raw.githubusercontent.com/FaridLazouache/MateriaList/coverage/badges/lines.svg)
 
 ## Overview
 Welcome to MateriaList! This project helps you manage your items efficiently.

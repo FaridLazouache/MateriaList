@@ -71,4 +71,12 @@ jobs:
       with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           name: 'PR UT Reports'
+    - name: push coverage artifacts to another branch
+      uses: peaceiris/actions-gh-pages@v4
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+      with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./coverage
+          publish_branch: coverage
+          allow_empty_commit: true
     
