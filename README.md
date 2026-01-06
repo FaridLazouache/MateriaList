@@ -7,37 +7,35 @@ Welcome to MateriaList! This project helps you manage your items efficiently.
 ## Features
 - 📋 Organize your items
 
-## Todo List
+## ROADMAP
 
 <details>
-<summary><b>🚀 Development</b></summary>
+<summary><b>Version 0.1 - Back-End 📊</b></summary>
 
-- [x] Set up development environment
-- [ ] Create feature branches
-- [ ] Write unit tests
-- [ ] Submit pull requests
+- [x] Create a database
+- [x] Create queries to communicate with database
+- [ ] Login system to secure Database
+- [ ] Middleware to avoid unauthorized access
 
 </details>
 
 <details>
-<summary><b>📦 Deployment</b></summary>
+<summary><b>Version 0.2 - Front-End 💻</b></summary>
 
-- [ ] Build production bundle
-- [ ] Run final tests
-- [ ] Deploy to staging
-- [ ] Deploy to production
+- [x] Create a schema for main page
+- [ ] Create a schema for login page and main page as logged
+- [ ] Front-End pages
+
+</details>
+
+<summary><b>Version 0.3 - Docker 🐋</b></summary>
+
+- [ ] Create a Dockerfile to handle all the project
+- [ ] Docker building deployment
+- [ ] Docker-compose test and documentation
 
 </details>
 
-<details>
-<summary><b>🔧 Maintenance</b></summary>
-
-- [ ] Update dependencies
-- [ ] Fix reported bugs
-- [ ] Monitor performance
-- [ ] Document changes
-
-</details>
 
 ## Installation
 
@@ -48,6 +46,6 @@ npm install
 ## Usage
 
 ```bash
-npm start
+npm run dev
 ```
 
