@@ -28,14 +28,16 @@ Welcome to MateriaList! This project helps you manage your items efficiently.
 
 </details>
 
+<details>
 <summary><b>Version 0.3 - Docker 🐋</b></summary>
 
 - [ ] Create a Dockerfile to handle all the project
 - [ ] Docker building deployment
 - [ ] Docker-compose test and documentation
 
-</details>
-
+</details>  
+<br/>
+Details above describe what the v1.0 will be featured with
 
 ## Installation
 
