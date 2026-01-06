@@ -66,4 +66,8 @@ jobs:
       run: |
         npx svelte-kit sync
         npm run coverage
+    - name: Generate coverage report
+      run: |
+        npm run generate-coverage-report
+        mv coverage/badges ./
     

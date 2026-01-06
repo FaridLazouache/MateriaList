@@ -8,5 +8,8 @@ export default defineConfig({
     setupFiles: ["./vitest.setup.ts"],
     environment: "node",
     globals: true,
+    coverage: {
+      reporter: ["text", "json-summary", "json"],
+    },
   },
 });

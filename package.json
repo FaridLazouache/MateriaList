@@ -9,7 +9,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "generate-coverage-report": "generate-coverage-report -p ./coverage/badges"
   },
   "devDependencies": {
     "@sveltejs/adapter-vercel": "^5.5.0",
@@ -33,6 +34,7 @@
   },
   "type": "module",
   "dependencies": {
+    "@hyperse/vitest-coverage-reporter": "^1.0.16",
     "better-sqlite3": "^12.5.0",
     "dotenv": "^16.0.3",
     "ms": "^2.1.3",

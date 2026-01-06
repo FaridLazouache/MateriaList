@@ -1,6 +1,11 @@
 
 # MateriaList
 
+![Coverage: Statements](./badges/statements.svg)
+![Coverage: Branches](./badges/branches.svg)
+![Coverage: Functions](./badges/functions.svg)
+![Coverage: Lines](./badges/lines.svg)
+
 ## Overview
 Welcome to MateriaList! This project helps you manage your items efficiently.
 
