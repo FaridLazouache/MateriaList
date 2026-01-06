@@ -66,8 +66,9 @@ jobs:
       run: |
         npx svelte-kit sync
         npm run coverage
-    - name: Generate coverage report
-      run: |
-        npm run generate-coverage-report
-        mv coverage/badges ./
+    name: 'PR UT Reports'
+        uses: hyperse-io/vitest-coverage-reporter@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: 'PR UT Reports'
     
