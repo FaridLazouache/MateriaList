@@ -1,7 +1,7 @@
 <script lang="ts">
  import { onMount } from 'svelte';
  import { SwaggerUIBundle } from 'swagger-ui-dist';
- import 'swagger-ui/dist/swagger-ui.css';
+ import 'swagger-ui-dist/swagger-ui.css';
 
   onMount(() => {
     SwaggerUIBundle({

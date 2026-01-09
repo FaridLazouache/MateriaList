@@ -15,3 +15,8 @@ vite.config.ts.timestamp-*
 *.tsbuildinfo
 **/*.sqlite
 src/database/db.sqlite
+coverage
+**/*.sveltekit**
+.vercel/**
+**.db
+**.sqlite

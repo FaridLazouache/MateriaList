@@ -1,4 +1,7 @@
-import { db } from "./db";
+import { getDatabase, startDatabase } from "./db";
+
+const { db, dbPath } = getDatabase();
+startDatabase(db, dbPath);
 
 /* ========================= ITEM ========================= */
 

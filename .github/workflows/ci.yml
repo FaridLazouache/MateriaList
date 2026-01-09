@@ -1,0 +1,82 @@
+name: MateriaList CI
+
+env:
+  DATABASE_FOLDER: ${{ vars.DATABASE_FOLDER }}
+  DATABASE_FILE: ${{ vars.DATABASE_FILE }}
+  LOG_LEVEL: ${{ vars.LOG_LEVEL }}
+
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: "npm"
+
+    - name: Build
+      env:
+        NODE_ENV: ${{ vars.NODE_ENV }}
+      run: |
+        npm ci --no-fund --no-audit --include=dev
+        npx svelte-kit sync
+        npm run build
+  tests:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: "npm"
+
+    - name: Install dependencies
+      run: |
+        npm ci --no-fund --no-audit --include=dev
+
+    - name: Run tests
+      env:
+        NODE_ENV: test
+        DATABASE_FOLDER: ${{ vars.DATABASE_FOLDER }}
+        DATABASE_FILE: ${{ vars.DATABASE_FILE }}
+        LOG_LEVEL: ${{ vars.LOG_LEVEL }}
+      run: |
+        npx svelte-kit sync
+        npm run test
+    - name: test coverage
+      env:
+        NODE_ENV: test
+        DATABASE_FOLDER: ${{ vars.DATABASE_FOLDER }}
+        DATABASE_FILE: ${{ vars.DATABASE_FILE }}
+        LOG_LEVEL: ${{ vars.LOG_LEVEL }}
+      run: |
+        npx svelte-kit sync
+        npm run coverage
+    - name: 'PR UT Reports'
+      uses: hyperse-io/vitest-coverage-reporter@v1
+      with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          name: 'PR UT Reports'
+    - name: push coverage artifacts to another branch
+      uses: peaceiris/actions-gh-pages@v4
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+      with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./coverage
+          publish_branch: coverage
+          allow_empty_commit: true
+    
